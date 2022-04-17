@@ -14,6 +14,11 @@ const routes: Routes = [
                 data: { module: ModulesInfo.home.name }
             }
         ]
+    },
+    {
+        path: 'reservation',
+        loadChildren: () => import('./modules/reservation/reservation.module').then(module => module.ReservationModule),
+        data: { mode: ModulesInfo.reservation.name }
     }
 ];
 
