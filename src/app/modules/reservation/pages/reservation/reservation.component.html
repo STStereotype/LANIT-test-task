@@ -1,1 +1,40 @@
-<div>Hello</div>
+<div class="reservation_wrapper">
+    <p class="title">Бронирование номера</p>
+    <p class="hr"></p>
+    <form class="form">
+        <div class="check-in-date">
+            <div>
+                <label for="arrival">Дата заезда</label>
+                <input type="date" id="arrival">
+            </div>
+            <div>
+                <label for="departure">Дата отъезда</label>
+                <input type="date" id="departure">
+            </div>
+        </div>
+        <label for="name">Имя</label>
+        <input type="text" id="name" placeholder="Имя">
+        <label for="surname">Фамилия</label>
+        <input type="text" id="surname" placeholder="Фамилия">
+        <label for="patronymic">Отчество</label>
+        <input type="text" id="patronymic" placeholder="Отчество">
+        <label for="birth-day">Дата рождения</label>
+        <input type="date" id="birth-day">
+        <label for="number-guests">Количество гостей</label>
+        <select id="number-guests">
+            <option>Один гость</option>
+            <option>Два гостя</option>
+            <option>Три гостя</option>
+            <option>Четыре гостя</option>
+            <option>Пять гостей</option>
+            <option>Шесть гостей</option>
+        </select>
+        <label for="hotel-room-type">тип номера</label>
+        <select id="hotel-room-type">
+            <option *ngFor="let text of hotelRoomType">{{text.name}}</option>
+        </select>
+        <label for="animal">С животными</label>
+        <input type="checkBox" id="animal">
+        <button class="btn">Забронировать</button>
+    </form>
+</div>

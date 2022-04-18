@@ -910,4 +910,59 @@ table,
     background-position: 20%;
   }
 }
+.reservation_wrapper {
+  padding: 50px 0;
+  margin: 0 auto;
+}
+.reservation_wrapper .form {
+  width: 424px;
+  margin: 0 auto;
+}
+.reservation_wrapper .title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.reservation_wrapper .hr {
+  width: 700px;
+  border: 1px solid #808080;
+  margin: 0 auto;
+}
+.reservation_wrapper .check-in-date {
+  display: flex;
+  justify-content: space-between;
+}
+.reservation_wrapper label {
+  display: block;
+  margin: 10px 0 0 0;
+}
+.reservation_wrapper input, .reservation_wrapper select {
+  width: 200px;
+  padding: 0 0 0 10px;
+  height: 27px;
+  background: #FFFFFF;
+  border: 1px solid #808080;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+.reservation_wrapper input:focus, .reservation_wrapper select:focus {
+  outline-style: none;
+}
+.reservation_wrapper input[type=checkBox] {
+  width: 20px;
+}
+.reservation_wrapper .btn {
+  display: block;
+  font-size: 16px;
+  padding: 6px 10px;
+  margin: 0 auto;
+  background: #0000FF;
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  transition: color 0.4s;
+}
+.reservation_wrapper .btn:hover {
+  color: #00ffea;
+}
 /*# sourceMappingURL=screen.css.map */
