@@ -915,7 +915,7 @@ table,
   margin: 0 auto;
 }
 .reservation_wrapper .form {
-  width: 424px;
+  width: 624px;
   margin: 0 auto;
 }
 .reservation_wrapper .title {
@@ -937,7 +937,7 @@ table,
   margin: 10px 0 0 0;
 }
 .reservation_wrapper input, .reservation_wrapper select {
-  width: 200px;
+  width: 300px;
   padding: 0 0 0 10px;
   height: 27px;
   background: #FFFFFF;
@@ -964,5 +964,14 @@ table,
 }
 .reservation_wrapper .btn:hover {
   color: #00ffea;
+}
+.reservation_wrapper .btn:focus {
+  box-shadow: none;
+}
+
+.invalid {
+  font-size: 12px;
+  color: red;
+  margin: 0;
 }
 /*# sourceMappingURL=screen.css.map */

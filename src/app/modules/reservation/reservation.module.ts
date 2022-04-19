@@ -5,8 +5,9 @@ import { RouterModule } from '@angular/router';
 import { ReservationRoutingModule } from './reservation-routing.module';
 import { ReservationServicesModule } from './reservation-services.module';
 
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { PAGES } from './pages';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -16,10 +17,12 @@ import { PAGES } from './pages';
     imports: [
         CommonModule,
         RouterModule,
+        ReactiveFormsModule,
+        FormsModule,
 
         ReservationServicesModule,
         ReservationRoutingModule,
-        SharedModule
+        SharedModule,
     ]
 })
 

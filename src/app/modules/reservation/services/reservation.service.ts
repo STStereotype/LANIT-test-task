@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { ReservationServicesModule } from '../reservation-services.module';
 import { HotelRoomTypeModel } from '@shared/models/reservation.model';
 import { AppUrlService } from './app-url.service';
+import { RoomBookingModel } from '@shared/models/room-booking.model';
 
 @Injectable({
     providedIn: ReservationServicesModule
@@ -31,12 +32,27 @@ export class ReservationService {
             },
             {
                 id: 2,
-                name: 'Двухкомнатный (до 6-ти гостей)'
+                name: 'Семейный (до 4-х гостей)'
             },
             {
                 id: 3,
+                name: 'Двухкомнатный (до 6-ти гостей)'
+            },
+            {
+                id: 4,
                 name: 'Люкс двухместный'
             }
         ]);
+    }
+
+    sendInfo(data: RoomBookingModel): Observable<RoomBookingModel> {
+        // const url = this.urls.sendInfo();
+        // return this.http.post<RoomBookingModel>(url, data).pipe(
+        //     catchError(error => {
+        //         return throwError(error);
+        //     })
+        // );
+        console.log(data);
+        return null;
     }
 }
