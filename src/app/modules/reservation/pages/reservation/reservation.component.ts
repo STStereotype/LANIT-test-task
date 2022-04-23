@@ -22,7 +22,7 @@ export class ReservationComponent implements OnInit, DoCheck  {
         user: this.formBuilder.group({
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
-            patronymicName: ['', Validators.required],
+            patronymicName: [''],
             birthday: ['', Validators.required],
         })
     });

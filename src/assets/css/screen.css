@@ -81,8 +81,13 @@ body button {
 body button:focus {
   outline: none;
 }
+body main {
+  flex: 1 0 auto;
+}
 
 .sc_wrapper {
+  display: flex;
+  flex-direction: column;
   margin: 0 auto;
   min-height: 100vh;
 }
@@ -605,6 +610,7 @@ table,
   color: #393D40;
   width: 100%;
   height: 180px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
