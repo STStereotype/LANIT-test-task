@@ -5,7 +5,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { ReservationServicesModule } from '../reservation-services.module';
-import { HotelRoomTypeModel } from '@shared/models/reservation.model';
+import { HotelRoomTypeModel } from '../models/reservation.model';
 import { AppUrlService } from './app-url.service';
 import { RoomBookingModel } from '@shared/models/room-booking.model';
 

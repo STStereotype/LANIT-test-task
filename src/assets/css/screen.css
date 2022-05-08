@@ -974,8 +974,21 @@ table,
 .reservation_wrapper .btn:focus {
   box-shadow: none;
 }
+.reservation_wrapper .warning .warning-title {
+  padding-right: 10px;
+  display: inline;
+  cursor: default;
+}
+.reservation_wrapper .warning .warning-btn {
+  display: inline;
+  padding: 3px 4px;
+  color: white;
+  border-radius: 3px;
+  background: #888888;
+  cursor: pointer;
+}
 
-.invalid {
+.invalid, .warning {
   font-size: 12px;
   color: red;
   margin: 0;
