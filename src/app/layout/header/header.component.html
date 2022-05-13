@@ -12,12 +12,12 @@
                     </form>
                     <div class="city_data_container">
                         <div class="city_data">
-                            <app-weather *ngIf="weather && weather['Tomsk']" [weather]="weather['Tomsk']" [text]="'в Томске'"></app-weather>
-                            <app-time [city]="citiesEnum.Tomsk" [text]="'в Томске'"></app-time>
+                            <app-weather *ngIf="weather$ | async as weather" [weather]="weather['Tomsk']" [text]="'в Томске'"></app-weather>
+                            <app-time [city]="cities.Tomsk" [text]="'в Томске'"></app-time>
                         </div>
                         <div class="city_data">
-                            <app-weather *ngIf="weather && weather['Moscow']" [weather]="weather['Moscow']" [text]="'в Москве'"></app-weather>
-                            <app-time [city]="citiesEnum.Moscow" [text]="'в Москве'"></app-time>
+                            <app-weather *ngIf="weather$ | async as weather" [weather]="weather['Moscow']" [text]="'в Москве'"></app-weather>
+                            <app-time [city]="cities.Moscow" [text]="'в Москве'"></app-time>
                         </div>
                     </div>
                 </div>

@@ -1,35 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import {CitiesEnum, Weather} from '@shared/models';
-import { WeatherService } from '@shared/services';
-import { catchError, map } from 'rxjs/operators';
+import { Component } from '@angular/core';
+import { CitiesEnum } from '@shared/models';
+
+import * as selectors from '@app/state/index';
+import { Store } from '@ngrx/store';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html'
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
-    cities = Object.entries(CitiesEnum).map(([key, value]) => ({ key, value }));
-    citiesEnum = CitiesEnum;
+    cities = CitiesEnum;
 
-    weather: { [city: string]: Weather } = {};
+    weather$ = this.store$.select(selectors.getWeather);
 
-    constructor(private weatherService: WeatherService) {}
-
-    ngOnInit(): void {
-        this.cities.forEach(city => this.loadWeatherByCity(city.key));
-    }
-
-    private loadWeatherByCity(city: string): void {
-        this.weatherService.getWeather(city).pipe(
-            map(data => {
-                this.weather[city] = data;
-            }),
-            catchError(error => {
-                console.error(error);
-                return [];
-            })
-        ).subscribe();
-    }
+    constructor(private store$: Store) {}
 
 }

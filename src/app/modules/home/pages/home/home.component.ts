@@ -1,28 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
 
-import { BlockLinkModel } from '@shared/models';
-import { HomeService } from '@home/services';
-import { catchError, map } from 'rxjs/operators';
+import * as selectors from '@home/state/selectors';
+import * as actions from '@home/state/actions';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
-    blocks: BlockLinkModel[];
+    blocks$ = this.store$.select(selectors.getResources);
 
-    constructor(private homeService: HomeService) {}
-
-    ngOnInit(): void {
-        this.homeService.loadInfo().pipe(
-            map(data => {
-                this.blocks = data;
-            }),
-            catchError(error => {
-                console.error(error);
-                return [];
-            })
-        ).subscribe();
+    constructor(private store$: Store) {
+        this.store$.dispatch(actions.initHomePage());
     }
 }
