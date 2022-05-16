@@ -4,6 +4,9 @@ import { HotelRoomTypeModel } from '../../models/reservation.model';
 import { ReservationService } from '../../services';
 import { FormBuilder, Validators } from '@angular/forms';
 import { RoomBookingModel } from '@shared/models/room-booking.model';
+import {Store} from '@ngrx/store';
+import * as selectors from '../../state/selectors';
+import * as actions from '../../state/actions';
 
 @Component({
     selector: 'app-reservation',
@@ -16,8 +19,8 @@ export class ReservationComponent implements OnInit  {
     startDate = new Date().toISOString().split('T')[0];
     dateBirth = '';
     endDate = '';
-
-    hotelRoomType: HotelRoomTypeModel[];
+    hotelRoomType: any;
+    hotelRoomType$ = this.store$.select(selectors.getResources);
     form = this.formBuilder.group({
         roomTypeId: ['', Validators.required],
         countOfGuests: ['', Validators.required],
@@ -32,24 +35,17 @@ export class ReservationComponent implements OnInit  {
         })
     });
 
-    constructor(private hotelRoomTypeService: ReservationService, public formBuilder: FormBuilder) {
+    constructor(public formBuilder: FormBuilder, private store$: Store) {
+        this.store$.dispatch(actions.initReservationPage());
+        this.hotelRoomType = this.hotelRoomType$['actionsObserver']['_value']['resources'];
         this.dateDeparture();
         this.dateBirthLimit();
     }
 
     ngOnInit(): void {
-        this.hotelRoomTypeService.loadInfo().pipe(
-            map(data => {
-                this.hotelRoomType = data;
-                this.form.get('roomTypeId').setValue(0);
-                this.form.get('countOfGuests').setValue(0);
-                this.roomType();
-            }),
-            catchError(error => {
-                console.error(error);
-                return [];
-            })
-        ).subscribe();
+        this.form.get('roomTypeId').setValue(0);
+        this.form.get('countOfGuests').setValue(0);
+        this.roomType();
     }
     private dateBirthLimit(): void {
         const date = new Date();
@@ -139,7 +135,6 @@ export class ReservationComponent implements OnInit  {
                     birthday: form.controls.user.controls.birthday.value
                 }
             };
-            this.hotelRoomTypeService.sendInfo(data);
         }
         this.formSent = true;
     }

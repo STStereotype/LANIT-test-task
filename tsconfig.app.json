@@ -16,6 +16,9 @@
             "@home/*": [
                 "src/app/modules/home/*"
             ],
+            "@reservation/*": [
+                "src/app/modules/reservation/*"
+            ],
             "@shared/*": [
                 "src/app/modules/shared/*"
             ],
