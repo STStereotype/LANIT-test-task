@@ -1,4 +1,4 @@
-export interface RoomBookingModel {
+export interface RoomReservationModel {
     roomTypeId: number;
     countOfGuests: number;
     startDate: string;

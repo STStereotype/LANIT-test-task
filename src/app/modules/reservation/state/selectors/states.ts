@@ -2,7 +2,7 @@ import { createFeatureSelector } from '@ngrx/store';
 
 import * as routerSelectors from '@navigation/state';
 
-import { ReservationState } from '../reducers';
+import { ReservationState } from '@reservation/state/reducers';
 
 export const ReservationFeatureName = 'reservation';
 

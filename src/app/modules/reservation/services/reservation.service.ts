@@ -5,9 +5,8 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { ReservationServicesModule } from '../reservation-services.module';
-import { HotelRoomTypeModel } from '../models/reservation.model';
+import { HotelRoomTypeModel, RoomReservationModel} from '@reservation/models';
 import { AppUrlService } from './app-url.service';
-import { RoomBookingModel } from '@shared/models/room-booking.model';
 
 @Injectable({
     providedIn: ReservationServicesModule
@@ -45,7 +44,7 @@ export class ReservationService {
         ]);
     }
 
-    sendInfo(data: RoomBookingModel): Observable<RoomBookingModel> {
+    sendInfo(data: RoomReservationModel): Observable<any> {
         // const url = this.urls.sendInfo();
         // return this.http.post<RoomBookingModel>(url, data).pipe(
         //     catchError(error => {
@@ -53,6 +52,6 @@ export class ReservationService {
         //     })
         // );
         console.log(data);
-        return null;
+        return of({});
     }
 }

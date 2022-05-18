@@ -1,4 +1,4 @@
-import { HotelRoomTypeModel } from '../../models/reservation.model';
+import { HotelRoomTypeModel } from '@reservation/models';
 
 export interface ReservationState {
     resources: HotelRoomTypeModel[];

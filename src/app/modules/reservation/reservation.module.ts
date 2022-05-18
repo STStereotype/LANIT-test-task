@@ -11,12 +11,12 @@ import { SharedModule } from '@shared/shared.module';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import {EFFECTS} from './state/effects';
-import {ReservationFeatureName} from './state/selectors';
+import { EFFECTS } from './state/effects';
+import { ReservationFeatureName } from './state/selectors';
 import * as reducer from './state/reducers';
 
 import { PAGES } from './pages';
-import {StoreModule} from '@ngrx/store';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
     declarations: [

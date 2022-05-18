@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import {ReservationPageEffects} from './reservation';
+import { map } from 'rxjs/operators';
+
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import * as actions from '../actions';
-import { switchMapTo } from 'rxjs/operators';
+
+import { ReservationPageEffects } from './reservation';
+import * as actions from '@reservation/state/actions';
 
 @Injectable()
 export class ReservationEffects {
@@ -11,9 +13,8 @@ export class ReservationEffects {
 
     initReservationPage$ = createEffect(() => this.actions$.pipe(
         ofType(actions.initReservationPage),
-        switchMapTo([
-            actions.loadResources(),
-        ])
+        map(() => actions.loadResources()
+        )
     ));
 }
 

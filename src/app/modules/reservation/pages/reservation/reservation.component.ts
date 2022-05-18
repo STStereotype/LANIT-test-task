@@ -1,12 +1,11 @@
+import { RoomReservationModel } from '@reservation/models/room-reservation.model';
+import * as selectors from '@reservation/state/selectors';
+import * as actions from '@reservation/state/actions';
+
 import { Component, OnInit } from '@angular/core';
-import { catchError, map } from 'rxjs/operators';
-import { HotelRoomTypeModel } from '../../models/reservation.model';
-import { ReservationService } from '../../services';
 import { FormBuilder, Validators } from '@angular/forms';
-import { RoomBookingModel } from '@shared/models/room-booking.model';
-import {Store} from '@ngrx/store';
-import * as selectors from '../../state/selectors';
-import * as actions from '../../state/actions';
+
+import { select, Store } from '@ngrx/store';
 
 @Component({
     selector: 'app-reservation',
@@ -20,7 +19,6 @@ export class ReservationComponent implements OnInit  {
     dateBirth = '';
     endDate = '';
     hotelRoomType: any;
-    hotelRoomType$ = this.store$.select(selectors.getResources);
     form = this.formBuilder.group({
         roomTypeId: ['', Validators.required],
         countOfGuests: ['', Validators.required],
@@ -35,106 +33,94 @@ export class ReservationComponent implements OnInit  {
         })
     });
 
-    constructor(public formBuilder: FormBuilder, private store$: Store) {
+    constructor(private formBuilder: FormBuilder, private store$: Store) {
         this.store$.dispatch(actions.initReservationPage());
-        this.hotelRoomType = this.hotelRoomType$['actionsObserver']['_value']['resources'];
+        this.store$.pipe(select(selectors.getResources)).subscribe((hotelRoomType) => {
+            this.hotelRoomType = hotelRoomType;
+        });
         this.dateDeparture();
         this.dateBirthLimit();
     }
 
-    ngOnInit(): void {
-        this.form.get('roomTypeId').setValue(0);
-        this.form.get('countOfGuests').setValue(0);
-        this.roomType();
-    }
+    ngOnInit(): void {}
+
     private dateBirthLimit(): void {
         const date = new Date();
         date.setDate(new Date().getDate() - 1);
         date.setFullYear(new Date().getFullYear() - 14);
         this.dateBirth = date.toISOString().split('T')[0];
     }
+
     private dateDeparture(): void {
         const date = new Date();
         date.setDate(new Date().getDate() + 1);
         this.endDate = date.toISOString().split('T')[0];
     }
+
+    private withAnimals(roomTypeValue: string): void {
+        const withAnimal = this.form.get('withAnimal');
+        if (Number(roomTypeValue) === this.hotelRoomType[4].id) {
+            this.form.controls.withAnimal.setValue(false);
+            withAnimal.disable();
+        } else {
+            withAnimal.enable();
+        }
+    }
+
+    roomType(): void {
+        const roomTypeValue = this.form.get('roomTypeId').value;
+        this.withAnimals(roomTypeValue);
+    }
+
+    numberGuests(): any {
+        switch (Number(this.form.get('roomTypeId').value)) {
+            case 0:
+                return Array(1);
+            case 1:
+            case 4:
+                return Array(2);
+            case 2:
+                return Array(4);
+            case 3:
+                return Array(6);
+        }
+    }
+
     arrivalDate(): void {
         const startDate = this.form.get('startDate');
         const endDate = this.form.get('endDate');
         const date = new Date(startDate.value);
         date.setDate(new Date(startDate.value).getDate() + 1);
         this.endDate = date.toISOString().split('T')[0];
-        if (startDate.value > endDate.value) {
-            this.form.get('endDate').setValue(undefined);
+        if (startDate.value >= endDate.value) {
+            endDate.setValue(undefined);
         }
     }
-    validation(valid: boolean): boolean {
-        return this.formSent && valid;
+
+    validation(control): boolean {
+        return !control.valid && this.formSent;
     }
+
     onlyLetters(value: any): void {
         value.setValue(value.value.replace(/[^a-zа-яё\\s]/gi, ''));
     }
-    roomType(): void {
-        const roomTypeValue = this.form.get('roomTypeId').value;
-        const withAnimal = this.form.get('withAnimal');
-        if (Number(roomTypeValue) !== this.hotelRoomType[4].id) {
-            withAnimal.enable();
-        } else {
-            this.form.controls.withAnimal.setValue(false);
-            withAnimal.disable();
-        }
-        switch (Number(roomTypeValue)) {
-            case 0:
-                this.enabledOption('countOfGuests', 0, 0);
-                this.disabledOption('countOfGuests', 1, 5);
-                break;
-            case 1:
-                this.enabledOption('countOfGuests', 0, 1);
-                this.disabledOption('countOfGuests', 2, 5);
-                break;
-            case 2:
-                this.enabledOption('countOfGuests', 0, 3);
-                this.disabledOption('countOfGuests', 4, 5);
-                break;
-            case 3:
-                this.enabledOption('countOfGuests', 0, 5);
-                break;
-            case 4:
-                this.enabledOption('countOfGuests', 0, 3);
-                this.disabledOption('countOfGuests', 2, 5);
-                break;
-        }
-        const currentGuest = this.form.get('countOfGuests').value;
-        const getElementCountOfGuest = document.getElementById('countOfGuests');
-        if (currentGuest !== '' && getElementCountOfGuest[currentGuest].disabled) {
-            this.form.get('countOfGuests').setValue(undefined);
-        }
-    }
-    enabledOption(idSelect: string, initial: number, finite: number): void {
-        for (let i = initial; i <= finite; i++) {
-            document.getElementById(idSelect)[i].disabled = false;
-        }
-    }
-    disabledOption(idSelect: string, initial: number, finite: number): void {
-        for (let i = initial; i <= finite; i++) {
-            document.getElementById(idSelect)[i].disabled = true;
-        }
-    }
-    onSubmit(form: any): void {
-        if (form.valid) {
-            const data: RoomBookingModel = {
-                roomTypeId: Number(form.controls.roomTypeId.value),
-                countOfGuests: Number(form.controls.countOfGuests.value),
-                startDate: form.controls.startDate.value,
-                endDate: form.controls.endDate.value,
-                withAnimal: form.controls.withAnimal.value,
+
+    onSubmit(): void {
+        if (this.form.valid) {
+            const data: RoomReservationModel = {
+                roomTypeId: Number(this.form.get('roomTypeId').value),
+                countOfGuests: Number(this.form.get('countOfGuests').value),
+                startDate: this.form.get('startDate').value,
+                endDate: this.form.get('endDate').value,
+                withAnimal: this.form.get('withAnimal').value,
                 user: {
-                    firstName: form.controls.user.controls.firstName.value,
-                    lastName: form.controls.user.controls.lastName.value,
-                    patronymicName: form.controls.user.controls.patronymicName.value,
-                    birthday: form.controls.user.controls.birthday.value
+                    firstName: this.form.get('user.firstName').value,
+                    lastName: this.form.get('user.lastName').value,
+                    patronymicName: this.form.get('user.patronymicName').value,
+                    birthday: this.form.get('user.birthday').value
                 }
             };
+            this.store$.dispatch(actions.sendResources({resources: data}));
         }
         this.formSent = true;
     }
