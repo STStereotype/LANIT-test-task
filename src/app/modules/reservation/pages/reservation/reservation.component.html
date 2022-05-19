@@ -1,108 +1,62 @@
 <div class="reservation_wrapper">
     <p class="title">Бронирование номера</p>
     <p class="hr"></p>
-    <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form class="form" [formGroup]="form">
         <div class="check-in-date">
             <div>
-                <div class="bloc-input">
-                    <label for="startDate">Дата заезда</label>
-                    <input
-                        type="date"
-                        id="startDate"
-                        name="startDate"
-                        (change)="arrivalDate()"
-                        formControlName="startDate"
-                        min="{{startDate}}"
-                    >
-                </div>
-                <p *ngIf="validation(form.get('startDate'))" class="invalid">Обязательное поле!</p>
+                <app-date-input [form]="getAsFormGroup(form)" [formControlName]="'startDate'" [labelText]="'Дата заезда'" [minDate]="startDate" (onChange)="arrivalDate()"></app-date-input>
+                <p *ngIf="isInvalid(form.get('startDate'))" class="invalid">Обязательное поле!</p>
             </div>
             <div>
-                <div class="bloc-input">
-                    <label for="endDate">Дата отъезда</label>
-                    <input
-                        type="date"
-                        id="endDate"
-                        name="endDate"
-                        formControlName="endDate"
-                        min="{{endDate}}"
-                    >
-                </div>
-                <p *ngIf="validation(form.get('endDate'))" class="invalid">Обязательное поле!</p>
+                <app-date-input [form]="getAsFormGroup(form)" [formControlName]="'endDate'" [labelText]="'Дата отъезда'" [minDate]="endDate"></app-date-input>
+                <p *ngIf="isInvalid(form.get('endDate'))" class="invalid">Обязательное поле!</p>
             </div>
         </div>
         <div formGroupName="user">
-            <div class="block-input">
-                <label for="firstName">Имя</label>
-                <input
-                    type="text"
-                    id="firstName"
-                    placeholder="Имя"
-                    name="firstName"
-                    formControlName="firstName"
-                    (input)="onlyLetters(form.get('user.firstName'))"
-                >
+            <div>
+                <app-only-letters-input [form]="getAsFormGroup(form.get('user'))" [placeholder]="'Имя'" [formControlName]="'firstName'" [labelText]="'Имя'"></app-only-letters-input>
+                <p *ngIf="isInvalid(form.get('user.firstName'))" class="invalid">Обязательное поле!</p>
             </div>
-            <p *ngIf="validation(form.get('user.firstName'))" class="invalid">Обязательное поле!</p>
-            <div class="block-input">
-                <label for="lastName">Фамилия</label>
-                <input
-                    type="text" id="lastName"
-                    placeholder="Фамилия"
-                    name="lastName"
-                    formControlName="lastName"
-                    (input)="onlyLetters(form.get('user.lastName'))"
-                >
+            <div>
+                <app-only-letters-input [form]="getAsFormGroup(form.get('user'))" [placeholder]="'Фамилия'" [formControlName]="'lastName'" [labelText]="'Фамилия'"></app-only-letters-input>
+                <p *ngIf="isInvalid(form.get('user.lastName'))" class="invalid">Обязательное поле!</p>
             </div>
-            <p  *ngIf="validation(form.get('user.lastName'))" class="invalid">Обязательное поле!</p>
-            <div class="block-input">
-                <label for="patronymicName">Отчество</label>
-                <input
-                    type="text"
-                    id="patronymicName"
-                    placeholder="Отчество"
-                    name="patronymicName"
-                    formControlName="patronymicName"
-                    (input)="onlyLetters(form.get('user.patronymicName'))"
-                >
+            <div>
+                <app-only-letters-input [form]="getAsFormGroup(form.get('user'))" [placeholder]="'Отчество'" [formControlName]="'patronymicName'" [labelText]="'Отчество'"></app-only-letters-input>
+                <p *ngIf="isInvalid(form.get('user.patronymicName'))" class="invalid">Обязательное поле!</p>
             </div>
-            <p *ngIf="validation(form.get('user.patronymicName'))" class="invalid">Обязательное поле!</p>
-            <div class="block-input">
-                <label for="birthday">Дата рождения</label>
-                <input
-                    type="date"
-                    id="birthday"
-                    name="birthday"
-                    formControlName="birthday"
-                    max="{{dateBirth}}"
-                >
+            <div>
+                <app-date-input [form]="getAsFormGroup(form.get('user'))" [formControlName]="'birthday'" [labelText]="'Дата рождения'" [maxDate]="dateBirth"></app-date-input>
+                <p *ngIf="isInvalid(form.get('user.birthday'))" class="invalid">Обязательное поле!</p>
             </div>
-            <p *ngIf="validation(form.get('user.birthday'))" class="invalid">Обязательное поле!</p>
         </div>
-        <div class="block-input">
-            <label for="roomTypeId">тип номера</label>
-            <select
-                id="roomTypeId"
-                name="roomTypeId"
-                formControlName="roomTypeId"
-                (change)="roomType()"
-            >
-                <option *ngFor="let text of hotelRoomType" value="{{text.id}}">{{text.name}}</option>
-            </select>
+        <div>
+            <div class="block-input">
+                <label for="roomTypeId">тип номера</label>
+                <select
+                    id="roomTypeId"
+                    name="roomTypeId"
+                    formControlName="roomTypeId"
+                    (change)="roomTypeChanged()"
+                >
+                    <option *ngFor="let text of hotelRoomType" value="{{text.id}}">{{text.name}}</option>
+                </select>
+            </div>
+            <p *ngIf="isInvalid(form.get('roomTypeId'))" class="invalid">Обязательное поле!</p>
         </div>
-        <p *ngIf="validation(form.get('roomTypeId'))" class="invalid">Обязательное поле!</p>
-        <div class="block-input">
-            <label for="countOfGuests">Количество гостей</label>
-            <select
-                id="countOfGuests"
-                type="number"
-                name="countOfGuests"
-                formControlName="countOfGuests"
-            >
-                <option value="{{index}}" *ngFor="let i of numberGuests(); let index = index">{{index + 1}}</option>
-            </select>
+        <div>
+            <div class="block-input">
+                <label for="countOfGuests">Количество гостей</label>
+                <select
+                    id="countOfGuests"
+                    name="countOfGuests"
+                    formControlName="countOfGuests"
+                >
+                    <option value="{{index + 1}}" *ngFor="let i of numberGuests(); let index = index">{{index + 1}}</option>
+                </select>
+            </div>
+            <p *ngIf="isInvalid(form.get('countOfGuests'))" class="invalid">Измените количество гостей</p>
         </div>
-        <p *ngIf="validation(form.get('countOfGuests'))" class="invalid">Измените количество гостей</p>
         <div class="block-input">
             <label for="withAnimal">С животными</label>
             <input
@@ -112,6 +66,6 @@
                 formControlName="withAnimal"
             >
         </div>
-        <button class="btn">Забронировать</button>
+        <button class="btn" type="button" (click)="save()">Забронировать</button>
     </form>
 </div>

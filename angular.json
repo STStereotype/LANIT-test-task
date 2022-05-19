@@ -38,7 +38,8 @@
                             "@babel/runtime/helpers/inheritsLoose",
                             "@babel/runtime/helpers/construct",
                             "mux.js/lib/mp4/probe",
-                            "mux.js/lib/tools/ts-inspector.js"
+                            "mux.js/lib/tools/ts-inspector.js",
+                            "toastr"
                         ],
                         "scripts": [],
                         "resourcesOutputPath": "assets"

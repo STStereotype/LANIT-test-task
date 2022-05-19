@@ -9,6 +9,8 @@ import { switchMap, catchError, map } from 'rxjs/operators';
 import * as actions from '../actions';
 import { ReservationService } from '@reservation/services';
 
+import * as toastr from 'toastr';
+
 @Injectable()
 export class ReservationPageEffects {
     constructor(private actions$: Actions,
@@ -32,10 +34,18 @@ export class ReservationPageEffects {
        ))
     ));
 
+    sendSuccess$ = createEffect( () => this.actions$.pipe(
+        ofType(actions.sendResourcesSuccess),
+        map( error => {
+            toastr.success('Номер успешно забронирован');
+            return actions.empty();
+        })
+    ));
+
     sendError$ = createEffect( () => this.actions$.pipe(
         ofType(actions.sendResourcesFails),
         map( error => {
-            console.log(error);
+            toastr.error('Ошибка бронирования!');
             return actions.empty();
         })
     ));
