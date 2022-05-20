@@ -46,7 +46,7 @@ export class ReservationService {
 
     sendInfo(data: RoomReservationModel): Observable<any> {
         // const url = this.urls.sendInfo();
-        // return this.http.post<RoomBookingModel>(url, data).pipe(
+        // return this.http.post<RoomReservationModel>(url, data).pipe(
         //     catchError(error => {
         //         return throwError(error);
         //     })

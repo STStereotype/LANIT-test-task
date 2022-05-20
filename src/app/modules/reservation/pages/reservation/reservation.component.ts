@@ -3,7 +3,7 @@ import * as selectors from '@reservation/state/selectors';
 import * as actions from '@reservation/state/actions';
 
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { select, Store } from '@ngrx/store';
 
@@ -14,7 +14,6 @@ import { select, Store } from '@ngrx/store';
 
 export class ReservationComponent implements OnInit  {
 
-    formSent = false;
     startDate = new Date().toISOString().split('T')[0];
     dateBirth = '';
     endDate = '';
@@ -35,14 +34,17 @@ export class ReservationComponent implements OnInit  {
 
     constructor(private formBuilder: FormBuilder, private store$: Store) {
         this.store$.dispatch(actions.initReservationPage());
+    }
+
+    ngOnInit(): void {
         this.store$.pipe(select(selectors.getResources)).subscribe((hotelRoomType) => {
             this.hotelRoomType = hotelRoomType;
+            this.form.get('roomTypeId').setValue(this.hotelRoomType[0].id);
+            this.roomTypeChanged();
         });
         this.dateDeparture();
         this.dateBirthLimit();
     }
-
-    ngOnInit(): void {}
 
     private dateBirthLimit(): void {
         const date = new Date();
@@ -67,7 +69,7 @@ export class ReservationComponent implements OnInit  {
         }
     }
 
-    roomType(): void {
+    roomTypeChanged(): void {
         const roomTypeValue = this.form.get('roomTypeId').value;
         this.withAnimals(roomTypeValue);
     }
@@ -97,15 +99,15 @@ export class ReservationComponent implements OnInit  {
         }
     }
 
-    validation(control): boolean {
-        return !control.valid && this.formSent;
+    isInvalid(control): boolean {
+        return (control.touched || control.dirty) && control.invalid;
     }
 
-    onlyLetters(value: any): void {
-        value.setValue(value.value.replace(/[^a-zа-яё\\s]/gi, ''));
+    getAsFormGroup(abstractControl: AbstractControl): FormGroup {
+        return abstractControl as FormGroup;
     }
 
-    onSubmit(): void {
+    save(): void {
         if (this.form.valid) {
             const data: RoomReservationModel = {
                 roomTypeId: Number(this.form.get('roomTypeId').value),
@@ -121,7 +123,8 @@ export class ReservationComponent implements OnInit  {
                 }
             };
             this.store$.dispatch(actions.sendResources({resources: data}));
+        } else {
+            this.form.markAllAsTouched();
         }
-        this.formSent = true;
     }
 }

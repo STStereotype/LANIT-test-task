@@ -1,0 +1,11 @@
+<div *ngIf="form" class="block-input" [formGroup]="form">
+    <label for="onlyLetters">{{labelText}}</label>
+    <input
+        type="text"
+        id="onlyLetters"
+        name="onlyLetters"
+        formControlName="{{formControlName}}"
+        [placeholder]="placeholder"
+        (input)="onlyLetters(form.get(formControlName))"
+    >
+</div>
